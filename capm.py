@@ -8,7 +8,7 @@ from datetime import date
 
 st.set_page_config(page_title="CAPM - Indian Market", layout="wide")
 
-st.title("Interactive CAPM Explorer — Indian Market 🇮🇳")
+st.title("CAPM  — Indian Market 🇮🇳")
 st.write("Upload tickers (NSE tickers use `.NS`, e.g. `RELIANCE.NS`) or type comma-separated tickers. Default benchmark: NIFTY 50 ( `^NSEI` ).")
 
 # --- Sidebar controls ---
@@ -18,7 +18,7 @@ with st.sidebar:
     benchmark = st.text_input("Benchmark ticker", value="^NSEI")
     start_date = st.date_input("Start date", value=pd.to_datetime("2020-01-01").date())
     end_date = st.date_input("End date", value=date.today())
-    freq = st.selectbox("Return frequency", options=["Daily", "Monthly"], index=1)
+    freq = st.selectbox("Return frequency", options=["Daily", "Monthly", "Yearly"], index=1)
     risk_free = st.number_input("Risk-free rate (annual %, e.g. 7.0)", min_value=0.0, value=7.0, step=0.1)
     show_regression = st.checkbox("Show regression lines on scatter", value=True)
     download_csv = st.checkbox("Show download buttons", value=True)
@@ -47,11 +47,18 @@ def fetch_price_data(tickers, start, end):
 def compute_returns(price_df, freq):
     if not isinstance(price_df.index, pd.DatetimeIndex):
         price_df.index = pd.to_datetime(price_df.index)
+
     if freq == "Daily":
         ret = price_df.pct_change().dropna()
-    else:
+    elif freq == "Monthly":
         monthly = price_df.resample('M').last()
         ret = monthly.pct_change().dropna()
+    elif freq == "Yearly":
+        yearly = price_df.resample('Y').last()
+        ret = yearly.pct_change().dropna()
+    else:
+        ret = price_df.pct_change().dropna()
+
     return ret
 
 
@@ -93,7 +100,7 @@ else:
     fig.update_layout(height=450, xaxis_title='Date', yaxis_title='Price (INR)')
     st.plotly_chart(fig, use_container_width=True)
 
-    periods_per_year = 252 if freq == "Daily" else 12
+    periods_per_year = 252 if freq == "Daily" else 12 if freq == "Monthly" else 1
     returns = compute_returns(price, freq)
 
     st.subheader("CAPM calculations")
@@ -186,4 +193,3 @@ else:
         st.download_button("Download price data (CSV)", data=csv, file_name="prices.csv", mime='text/csv')
 
     st.markdown("Aakash Singh © 2025 · [GitHub]")
-    
