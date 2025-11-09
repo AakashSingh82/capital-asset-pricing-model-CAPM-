@@ -8,7 +8,7 @@ from datetime import date
 
 st.set_page_config(page_title="CAPM PRO - Indian Market", layout="wide")
 
-st.title("FinVision — CAPM & Market Analyzer (Indian Market) 🇮🇳")
+st.title("CAPM & Market Analyzer (Indian Market) 🇮🇳")
 st.write("Use `.NS` for NSE tickers (e.g. RELIANCE.NS). Default benchmark: NIFTY 50 (`^NSEI`).")
 
 # --- Sidebar inputs ---
@@ -206,7 +206,7 @@ with tabs[2]:
 
 # ---------------- Portfolio ----------------
 with tabs[3]:
-    st.header("Portfolio Optimization (Monte Carlo)")
+    st.header("Portfolio Optimization")
     assets_for_portfolio = st.multiselect("Choose assets for portfolio", options=tickers, default=tickers[:min(len(tickers), 4)])
     n_sims = st.slider("Number of simulations", 1000, 20000, 5000, 500)
     if len(assets_for_portfolio) < 2:
@@ -241,7 +241,7 @@ with tabs[4]:
 
 # ---------------- Sentiment ----------------
 with tabs[5]:
-    st.header("Sentiment & Insights (Demo)")
+    st.header("Sentiment & Insights")
     corr = returns.corr()
     st.subheader("Return Correlation Matrix")
     fig_corr = px.imshow(corr, text_auto=True, aspect="auto", title="Return Correlation Matrix")
@@ -249,3 +249,4 @@ with tabs[5]:
 
 st.markdown("---")
 st.markdown("Aakash Singh © 2025 · [GitHub]")
+
