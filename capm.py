@@ -1,4 +1,4 @@
-# app.py
+# capm.py
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -626,3 +626,4 @@ with col_d2:
 
 st.markdown("---")
 st.caption("Aakash Singh © 2025 · FinVisionX")
+
